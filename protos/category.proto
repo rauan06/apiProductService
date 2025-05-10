@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package product;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+option go_package = "/product/v1;product";
+
+service Category {
+    rpc List(CategoryListReq) returns (CategoryListRep) {
+        option (google.api.http) = {
+            get: "/category"
+        };
+    };
+    rpc Get(CategoryGetReq) returns (CategoryMain) {
+        option (google.api.http) = {
+            get: "/category/{id}"
+        };
+    };
+}
+
+message CategoryMain {
+	google.protobuf.Timestamp created_at = 1;
+    google.protobuf.Timestamp updated_at = 2;
+    bool deleted = 3;
+    string id = 4;
+
+    string name = 5;
+}
+
+message CategoryGetReq {
+    string id = 1;
+}
+
+message CategoryListReq {
+    ListParamsSt list_params = 1;
+
+    repeated string ids = 2;
+}
+
+message CategoryListRep {
+    PaginationInfoSt pagination_info = 1;
+    repeated CategoryMain results = 2;
+}

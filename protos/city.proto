@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package product;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+option go_package = "/product/v1;product";
+
+service City {
+    rpc List(CityListReq) returns (CityListRep) {
+        option (google.api.http) = {
+            get: "/city"
+        };
+    };
+    rpc Get(CityGetReq) returns (CityMain) {
+        option (google.api.http) = {
+            get: "/city/{id}"
+        };
+    };
+}
+
+message CityMain {
+	google.protobuf.Timestamp created_at = 1;
+    google.protobuf.Timestamp updated_at = 2;
+    bool deleted = 3;
+    string id = 4;
+
+    string name = 5;
+    string postcode = 6;
+}
+
+message CityGetReq {
+    string id = 1;
+}
+
+message CityListReq {
+    ListParamsSt list_params = 1;
+    repeated string ids = 2;
+}
+
+message CityListRep {
+    PaginationInfoSt pagination_info = 1;
+    repeated CityMain results = 2;
+}
